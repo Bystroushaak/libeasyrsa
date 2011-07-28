@@ -29,7 +29,7 @@ rsa_context pubkey_to_rsa(pub_key_str pk);
 priv_key_str rsa_to_privkey(rsa_context *rsa);
 rsa_context privkey_to_rsa(priv_key_str pk);
 
-bool rsa_verify(rsa_context *rsa_pub, char *msg, char *sign);
+int rsa_verify(rsa_context *rsa_pub, unsigned char *msg, unsigned char *sign);
 char* rsa_sign(rsa_context *rsa_priv, unsigned char *msg);
 
 void rsa_free(rsa_context *rsa);

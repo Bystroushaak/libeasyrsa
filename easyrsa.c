@@ -109,30 +109,26 @@ char* rsa_sign(rsa_context *rsa_priv, unsigned char *msg){
 		out[i * 2 + 1] = tmp_buff[1];
 	}
 
-	out[rsa_priv->len] = 0;
+	out[rsa_priv->len * 2] = 0;
 
 	return out;
 }
 
-bool rsa_verify(rsa_context *rsa_pub, char *msg, char *sign){
+int rsa_verify(rsa_context *rsa_pub, unsigned char *msg, unsigned char *sign){
 	unsigned char hash[20];
 	unsigned char buff[RSA_SIGN_SIZE];
 
 	sha1(msg, strlen(msg), hash);
 
-	int i, bi = 0;
 	// convert sign from printable string
-	unsigned int c;
+	int i, c;
 	unsigned char tmp_buff[2];
-	for(i = 0; i < rsa_pub->len / 2; i++){
+	for(i = 0; i < rsa_pub->len; i++){
 		tmp_buff[0] = sign[i * 2];
 		tmp_buff[1] = sign[i * 2 + 1];
 		sscanf(tmp_buff, "%02X", &c);
 		buff[i] = (unsigned char) c;
 	}
 
-	if (rsa_pkcs1_verify(rsa_pub, RSA_PUBLIC, SIG_RSA_SHA1, 20, hash, buff) == 0)
-		return true;
-
-	return false;
+	return rsa_pkcs1_verify(rsa_pub, RSA_PUBLIC, SIG_RSA_SHA1, 20, hash, buff);
 }
