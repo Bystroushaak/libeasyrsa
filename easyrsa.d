@@ -1,10 +1,10 @@
 /**
  * libeasyrsa D wrapper
  *
- * D2/phobos wrapper for easyrsa (signing and verifing).
+ * D2/phobos wrapper for easyrsa (signing and verifying).
  *
  * Version: 
- *     1.0.1
+ *     1.0.2
  * Date:    
  *     28.07.2011
  * Aurhors:  
