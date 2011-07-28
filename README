@@ -1,0 +1,6 @@
+easyrsa is just C/D wrapper over polarssl which allows manipulation with key and
+signing/verifing messages.
+
+For build, run:
+	make download # downloads polarssl from svn
+	make # create libeasyrsa.a 
