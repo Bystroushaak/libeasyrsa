@@ -4,7 +4,7 @@
  * D2/phobos wrapper for easyrsa (signing and verifing).
  *
  * Version: 
- *     1.0.0
+ *     1.0.1
  * Date:    
  *     28.07.2011
  * Aurhors:  
@@ -168,19 +168,12 @@ class PrivateKey : PublicKey{
 	
 	/**
 	* Generate new private and public key.
-	*
-	* Throws:
-	*   InvalidKey
 	*/
 	this(){
 		this.rsa = generate_rsa();
 		
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
 		super(std.conv.to!string(pk.N) ~ ":" ~ std.conv.to!string(pk.E));
-		
-		// key check
-		if (rsa_check_privkey(&this.rsa) != 0)
-			throw new InvalidKey("Invalid private key!");
 	}
 	
 	/**
