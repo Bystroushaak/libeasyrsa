@@ -8,7 +8,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #include "polarssl/havege.h"
 #include "polarssl/bignum.h"
