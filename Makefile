@@ -8,8 +8,10 @@ $(OUTPUT): easyrsa.o
 	(cd polarssl; make)
 	@echo
 	@echo Creating library $(OUTPUT):
-	ar -rcs $(OUTPUT) easyrsa.o
-	cp polarssl/library/*.a .
+	-mkdir out
+	ar -rcs out/$(OUTPUT) easyrsa.o
+	cp polarssl/library/*.a out
+	cp libeasyrsa.d easyrsa.h out
 	
 	@echo
 	@echo Success
