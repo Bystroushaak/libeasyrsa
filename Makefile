@@ -11,7 +11,7 @@ $(OUTPUT): easyrsa.o
 	-mkdir out
 	ar -rcs out/$(OUTPUT) easyrsa.o
 	cp polarssl/library/*.a out
-	cp libeasyrsa.d easyrsa.h out
+	cp easyrsa.d easyrsa.h out
 	
 	@echo
 	@echo Success
