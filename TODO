@@ -1,0 +1,1 @@
+Check memory leaks (strings in structure - they are created in D, bud I'm not sure if D releases them..).
