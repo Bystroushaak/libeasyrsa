@@ -32,6 +32,9 @@ rsa_context privkey_to_rsa(priv_key_str pk);
 int rsa_verify(rsa_context *rsa_pub, unsigned char *msg, unsigned char *sign);
 char* rsa_sign(rsa_context *rsa_priv, unsigned char *msg);
 
+// functions from polarssl/rsa.h
+int rsa_check_privkey(const rsa_context *ctx);
+int rsa_check_pubkey(const rsa_context *ctx);
 void rsa_free(rsa_context *rsa);
 
 #endif

@@ -64,6 +64,8 @@ private extern(C){
 	int rsa_verify(rsa_context *rsa_pub, char *msg, char *sign);
 	char* rsa_sign(rsa_context *rsa_priv, char *msg);
 	
+	int rsa_check_privkey(const rsa_context *ctx);
+	int rsa_check_pubkey(const rsa_context *ctx);
 	void rsa_free(rsa_context *rsa);
 }
 
@@ -74,6 +76,12 @@ class RSAException : Exception{
 }
 
 class InvalidKeyFormat : RSAException{
+	this(string msg){
+		super(msg);
+	}
+}
+
+class InvalidKey : RSAException{
 	this(string msg){
 		super(msg);
 	}
@@ -93,6 +101,10 @@ class PublicKey{
 		ks.E = cast(char *) tmp[1].dup;
 		
 		this.rsa = pubkey_to_rsa(ks);
+		
+		// key check
+		if (rsa_check_pubkey(&this.rsa) != 0)
+			throw new InvalidKey("Invalid public key!");
 	}
 	
 	public bool verify(string message, string sign){
@@ -117,6 +129,10 @@ class PrivateKey : PublicKey{
 		
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
 		super(std.conv.to!string(pk.N) ~ ":" ~ std.conv.to!string(pk.E));
+		
+		// key check
+		if (rsa_check_privkey(&this.rsa) != 0)
+			throw new InvalidKey("Invalid private key!");
 	}
 	
 	this(string key){
@@ -138,6 +154,10 @@ class PrivateKey : PublicKey{
 		this.rsa = privkey_to_rsa(ks);
 		
 		super(std.conv.to!string(ks.N) ~ ":" ~ std.conv.to!string(ks.E));
+		
+		// key check
+		if (rsa_check_privkey(&this.rsa) != 0)
+			throw new InvalidKey("Invalid private key!");
 	}
 	
 	public PublicKey getPublicKey(){
