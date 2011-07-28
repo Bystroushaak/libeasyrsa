@@ -1,4 +1,4 @@
-//module easyrsa;
+module easyrsa;
 
 extern(C){
 	struct mpi{
