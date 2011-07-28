@@ -1,0 +1,5 @@
+Zprijemnit pouziti libeasyrsa.d.
+
+Prejmenovat libeasyrsa.d na easyrsa.d.
+
+Pridat fci pro konverzi keyu z/do jednoho stringu.
