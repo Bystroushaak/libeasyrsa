@@ -1,14 +1,12 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
-#include "polarssl/x509.h"
 #include "polarssl/havege.h"
 #include "polarssl/bignum.h"
 #include "polarssl/sha1.h"
 
-#include "libeasyrsa.h"
+#include "easyrsa.h"
 
 #define KEY_SIZE 1024
 #define EXPONENT 65537
@@ -138,24 +136,3 @@ bool rsa_verify(rsa_context *rsa_pub, char *msg, char *sign){
 
 	return false;
 }
-
-
-
-int main(int argc, char *argv[]){
-	rsa_context rsa = generate_rsa();
-	
-	//printf("Check: %d\n", rsa_check_pubkey(&rsa_pub));
-	
-	//printf("xe\n");
-	//mpi_write_file( "N = " , &rsa.N , 16, stdout);
-	//printf("Text: %s\nSigned: %s\n", "xex", rsa_sign(&rsa, "xex"));
-	
-	unsigned char *sign = rsa_sign(&rsa, "xex");
-	if (rsa_verify(&rsa, "xex", sign) == true)
-		printf("Ok\n");
-	else
-		printf("Err\n");
-
-    return 0;
-}
-
