@@ -1,8 +1,27 @@
+/**
+ * libeasyrsa D wrapper
+ *
+ * D2/phobos wrapper for easyrsa (signing and verifing).
+ *
+ * Version: 
+ *     1.0.0
+ * Date:    
+ *     28.07.2011
+ * Aurhors:  
+ *     Bystroushaak (bystrousak@kitakitsune.org)
+ * Website:
+ *     Github; https://github.com/Bystroushaak/libeasyrsa
+ * Copyright:
+ *     This work is licensed under a CC BY (http://creativecommons.org/licenses/by/3.0/)
+*/
+
 module easyrsa;
 
 import std.conv;
 import std.array;
 import std.string;
+
+
 
 private extern(C){
 	struct mpi{
@@ -69,27 +88,38 @@ private extern(C){
 	void rsa_free(rsa_context *rsa);
 }
 
+
+/***/
 class RSAException : Exception{
 	this(string msg){
 		super(msg);
 	}
 }
 
+/***/
 class InvalidKeyFormat : RSAException{
 	this(string msg){
 		super(msg);
 	}
 }
 
+/***/
 class InvalidKey : RSAException{
 	this(string msg){
 		super(msg);
 	}
 }
 
+
+/**
+ * This class represents public key.
+*/
 class PublicKey{
 	private rsa_context rsa;
 	
+	/**
+	 * Import private key from string.
+	*/
 	this(string key){
 		string[] tmp = key.split(":");
 		
@@ -107,10 +137,18 @@ class PublicKey{
 			throw new InvalidKey("Invalid public key!");
 	}
 	
+	/**
+	 * Verify signed message.
+	 *
+	 * Returns: True if ok, false if not.
+	*/
 	public bool verify(string message, string sign){
 		return 0 == rsa_verify(&this.rsa, cast(char *) message.dup, cast(char *) sign.dup);
 	}
 	
+	/**
+	 * Convert PublicKey to string. String can be used for creating this class.
+	*/
 	public string toString(){
 		pub_key_str pk = rsa_to_pubkey(&this.rsa);
 		return std.conv.to!string(pk.N) ~ ":" ~ std.conv.to!string(pk.E);
@@ -121,9 +159,19 @@ class PublicKey{
 	}
 }
 
+
+/**
+ * Class which holds both private and public key.
+*/
 class PrivateKey : PublicKey{
 	private rsa_context rsa;
 	
+	/**
+	* Generate new private and public key.
+	*
+	* Throws:
+	*   InvalidKey
+	*/
 	this(){
 		this.rsa = generate_rsa();
 		
@@ -135,6 +183,13 @@ class PrivateKey : PublicKey{
 			throw new InvalidKey("Invalid private key!");
 	}
 	
+	/**
+	 * Import private key from string.
+	 * 
+	 * Throws:
+	 *   InvalidKeyFormat
+	 *   InvalidKey
+	*/
 	this(string key){
 		string[] tmp = key.split(":");
 		
@@ -160,16 +215,27 @@ class PrivateKey : PublicKey{
 			throw new InvalidKey("Invalid private key!");
 	}
 	
+	/**
+	 * Export PublicKey.
+	*/
 	public PublicKey getPublicKey(){
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
 		
 		return new PublicKey(std.conv.to!string(pk.N) ~ ":" ~ std.conv.to!string(pk.E));
 	}
 	
+	/**
+	 * Sign message.
+	 *
+	 * Returns: 256B long string containing sign converted into hexa.
+	*/
 	public string sign(string message){
 		return std.conv.to!string(rsa_sign(&this.rsa, cast(char *) message.dup));
 	}
 	
+	/** 
+	 * Export private key into string.
+	*/
 	public string toString(){
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
 		

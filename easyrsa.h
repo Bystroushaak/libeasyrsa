@@ -1,3 +1,9 @@
+/* easyrsa.h v1.0.0 (28.07.2011) by Bystroushaak (bystrousak@kitakitsune.org)
+ * https://github.com/Bystroushaak/libeasyrsa
+ *
+ * This work is licensed under a CC BY (http://creativecommons.org/licenses/by/3.0/)
+*/
+
 #ifndef _LIBEASYRSA_H
 #define _LIBEASYRSA_H
 

@@ -1,3 +1,11 @@
+/* easyrsa.c v1.0.0 (28.07.2011) by Bystroushaak (bystrousak@kitakitsune.org)
+ * https://github.com/Bystroushaak/libeasyrsa
+ *
+ * Function for easy work (signing and verifing) with polarssl/rsa.h.
+ *
+ * This work is licensed under a CC BY (http://creativecommons.org/licenses/by/3.0/)
+*/
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
