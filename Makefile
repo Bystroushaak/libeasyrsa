@@ -4,14 +4,31 @@ OUTPUT=libeasyrsa.a
 
 build: $(OUTPUT)
 
-$(OUTPUT): libeasyrsa.o
-	#ar -cvq $(OUTPUT) rsa.o bignum.o md.o sha1.o
-	gcc libeasyrsa.o polarssl/library/libpolarssl.a -otest
+$(OUTPUT): easyrsa.o
+	(cd polarssl; make)
+	@echo
+	@echo Creating library $(OUTPUT):
+	ar -rcs $(OUTPUT) easyrsa.o
+	cp polarssl/library/*.a .
+	
+	@echo
+	@echo Success
 
-libeasyrsa.o: libeasyrsa.c libeasyrsa.h
-	$(CC) $(CFLAGS) libeasyrsa.c -olibeasyrsa.o
+easyrsa.o: easyrsa.c easyrsa.h
+	$(CC) $(CFLAGS) easyrsa.c -oeasyrsa.o
 
 clean:
+	-rm *.a *.o
+	
+download:
+	svn co http://polarssl.org/repos/polarssl/polarssl/trunk polarssl
 
-run: build
-	./test
+help:
+	@echo download
+	@echo "	Download fresh polarss from repository."
+	@echo build
+	@echo "	Build library (also polarssl)."
+	@echo clean
+	@echo "	Remove all object files and library." 
+	@echo help
+	@echo "	Print this help."
