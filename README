@@ -1,6 +1,12 @@
-easyrsa is just C/D wrapper over polarssl which allows manipulation with key and
-signing/verifing messages.
+easyrsa is just C/D wrapper over polarssl which allows manipulation with keys 
+and signing/verifing messages.
 
-For build, run:
-	make download # downloads polarssl from svn
-	make # create libeasyrsa.a 
+First of all, rename Makefile.xxx (depends on your platform) into Makefile.
+
+Then run:
+	make download # downloads polarssl from svn (you have to have svn installed in PATH)
+	make          # create out/libeasyrsa.a (or out/libeasyrsa.lib)
+
+On windows, both libraries (polarssl & easyrsa) are converted into OMF object 
+format. That is because DMD can't handle COFF, so you can't use GCC (which can't 
+handle OMF :S) for linking into C program. 
