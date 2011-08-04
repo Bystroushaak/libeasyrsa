@@ -1,7 +1,7 @@
 easyrsa is just C/D wrapper over polarssl which allows manipulation with keys 
 and signing/verifing messages.
 
-First of all, rename Makefile.xxx (depends on your platform) into Makefile.
+First of all, rename Makefile.xxx (depends on your platform) to just "Makefile".
 
 Then run:
 	make download # downloads polarssl from svn (you have to have svn installed in PATH)
