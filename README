@@ -7,6 +7,19 @@ Then run:
 	make download # downloads polarssl from svn (you have to have svn installed in PATH)
 	make          # create out/libeasyrsa.a (or out/libeasyrsa.lib)
 
+
+	
+- Windows note: ----------------------------------------------------------------
+
+Makefile expects installed msys (http://www.mingw.org/wiki/MSYS), mingw-gcc and
+latest dmd (2.054).
+
 On windows, both libraries (polarssl & easyrsa) are converted into OMF object 
 format. That is because DMD can't handle COFF, so you can't use GCC (which can't 
-handle OMF :S) for linking into C program. 
+handle OMF :S) for linking into C program.
+
+If you want to use easyrsa with gcc on windows (COFF), run these commands:
+
+	gcc easyrsa.c -c
+	ar -rcs libeasyrsa.a *.o
+	cp polarssl/library/*.a .
