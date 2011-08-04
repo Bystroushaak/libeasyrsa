@@ -21,6 +21,7 @@ easyrsa.o: easyrsa.c easyrsa.h
 
 clean:
 	-rm *.a *.o
+	-rm -fr out
 	
 download:
 	svn co http://polarssl.org/repos/polarssl/polarssl/trunk polarssl

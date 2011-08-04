@@ -1,0 +1,58 @@
+CC=gcc
+CFLAGS=-c -I polarssl/include/ -static
+OUTPUT=libeasyrsa.lib
+WIND=windows_sux
+
+build: $(OUTPUT) 
+
+$(OUTPUT): missing libpolarssl easyrsa.o
+	@echo
+	@echo Creating library $(OUTPUT):
+	-mkdir out
+	
+	$(WIND)/objconv.exe -fomf easyrsa.o easyrsa.obj
+	lib -c out/$(OUTPUT) *.obj # standard part of dmd
+	
+	cp easyrsa.d easyrsa.h out
+	cp polarssl/library/*.lib out/
+	
+	@echo
+	@echo Success
+
+easyrsa.o: easyrsa.c easyrsa.h
+	$(CC) $(CFLAGS) easyrsa.c -oeasyrsa.o
+
+missing:
+	cd $(WIND); make;
+	@echo
+	@echo Missing library successfuly build.
+	@echo
+	
+libpolarssl:
+	cd polarssl/library; make; cp ../../$(WIND)/*.exe .; ./obj_convertor.exe; lib -c libpolarssl.lib *.obj;
+	@echo 
+	@echo Polarssl successfuly build.
+	@echo
+
+download:
+	svn co http://polarssl.org/repos/polarssl/polarssl/trunk polarssl
+
+clean:
+	-rm *.a *.o *.obj *.lib
+	cd $(WIND); make clean
+	
+superclean: clean
+	-rm -fr out
+	-rm -fr polarssl
+
+help:
+	@echo download
+	@echo "	Download fresh polarss from repository."
+	@echo build
+	@echo "	Build library (also polarssl)."
+	@echo clean
+	@echo "	Remove all object files."
+	@echo superclean
+	@echo "	Remove polarssl, and output directory." 
+	@echo help
+	@echo "	Print this help."
