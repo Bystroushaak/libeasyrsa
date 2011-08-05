@@ -203,9 +203,11 @@ class PrivateKey : PublicKey{
 		
 		super(this.getPublicKey().toString());
 		
-		// key check
-		if (rsa_check_privkey(&this.rsa) != 0)
-			throw new InvalidKey("Invalid private key!");
+		version(Posix){ // doesn't work on windows :S
+			// key check
+			if (rsa_check_privkey(&this.rsa) != 0)
+				throw new InvalidKey("Invalid private key!");
+		}
 	}
 	
 	/**
