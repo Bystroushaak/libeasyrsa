@@ -4,9 +4,9 @@
  * D2/phobos wrapper for easyrsa (signing and verifying).
  *
  * Version: 
- *     1.0.2
+ *     1.0.3
  * Date:    
- *     28.07.2011
+ *     04.08.2011
  * Aurhors:  
  *     Bystroushaak (bystrousak@kitakitsune.org)
  * Website:
@@ -173,7 +173,7 @@ class PrivateKey : PublicKey{
 		this.rsa = generate_rsa();
 		
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
-		super(std.conv.to!string(pk.N) ~ ":" ~ std.conv.to!string(pk.E));
+		super(this.getPublicKey().toString());
 	}
 	
 	/**
@@ -201,7 +201,7 @@ class PrivateKey : PublicKey{
 		
 		this.rsa = privkey_to_rsa(ks);
 		
-		super(std.conv.to!string(ks.N) ~ ":" ~ std.conv.to!string(ks.E));
+		super(this.getPublicKey().toString());
 		
 		// key check
 		if (rsa_check_privkey(&this.rsa) != 0)
@@ -229,7 +229,7 @@ class PrivateKey : PublicKey{
 	/** 
 	 * Export private key into string.
 	*/
-	public string toString(){
+	override public string toString(){
 		priv_key_str pk = rsa_to_privkey(&this.rsa);
 		
 		return std.conv.to!string(pk.N) ~ ":" ~
