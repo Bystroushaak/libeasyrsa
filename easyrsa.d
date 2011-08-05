@@ -4,9 +4,9 @@
  * D2/phobos wrapper for easyrsa (signing and verifying).
  *
  * Version: 
- *     1.0.3
+ *     1.1.0
  * Date:    
- *     04.08.2011
+ *     05.08.2011
  * Aurhors:  
  *     Bystroushaak (bystrousak@kitakitsune.org)
  * Website:
@@ -127,16 +127,14 @@ class PublicKey{
 			throw new InvalidKeyFormat("Bad public key format!\n" ~ key);
 		
 		pub_key_str ks;
-		ks.N = cast(char *) tmp[0].dup;
-		ks.E = cast(char *) tmp[1].dup;
+		ks.N = cast(char *) toStringz(tmp[0]);
+		ks.E = cast(char *) toStringz(tmp[1]);
 		
 		this.rsa = pubkey_to_rsa(ks);
 
-		version(Posix){ // doesn't work on windows :S
-			// key check
-			if (rsa_check_pubkey(&this.rsa) != 0)
-				throw new InvalidKey("Invalid public key!");
-		}
+		// key check
+		if (rsa_check_pubkey(&this.rsa) != 0)
+			throw new InvalidKey("Invalid public key!");
 	}
 	
 	/**
@@ -145,7 +143,7 @@ class PublicKey{
 	 * Returns: True if ok, false if not.
 	*/
 	public bool verify(string message, string sign){
-		return 0 == rsa_verify(&this.rsa, cast(char *) message.dup, cast(char *) sign.dup);
+		return 0 == rsa_verify(&this.rsa, cast(char *) toStringz(message), cast(char *) toStringz(sign));
 	}
 	
 	/**
@@ -188,18 +186,18 @@ class PrivateKey : PublicKey{
 	this(string key){
 		string[] tmp = key.split(":");
 		
-		if (tmp.length < 8)
+		if (tmp.length != 8)
 			throw new InvalidKeyFormat("Bad private key format!\n" ~ key);
 		
 		priv_key_str ks;
-		ks.N = cast(char *) tmp[0].dup;
-		ks.E = cast(char *) tmp[1].dup;
-		ks.D = cast(char *) tmp[2].dup;
-		ks.P = cast(char *) tmp[3].dup;
-		ks.Q = cast(char *) tmp[4].dup;
-		ks.DP = cast(char *) tmp[5].dup;
-		ks.DQ = cast(char *) tmp[6].dup;
-		ks.QP = cast(char *) tmp[7].dup;
+		ks.N  = cast(char *) toStringz(tmp[0]);
+		ks.E  = cast(char *) toStringz(tmp[1]);
+		ks.D  = cast(char *) toStringz(tmp[2]);
+		ks.P  = cast(char *) toStringz(tmp[3]);
+		ks.Q  = cast(char *) toStringz(tmp[4]);
+		ks.DP = cast(char *) toStringz(tmp[5]);
+		ks.DQ = cast(char *) toStringz(tmp[6]);
+		ks.QP = cast(char *) toStringz(tmp[7]);
 		
 		this.rsa = privkey_to_rsa(ks);
 		
@@ -228,7 +226,7 @@ class PrivateKey : PublicKey{
 		if (message == "")
 			throw new RSAException("Signed message can't be blank!");
 			
-		return std.conv.to!string(rsa_sign(&this.rsa, cast(char *) message.dup));
+		return std.conv.to!string(rsa_sign(&this.rsa, cast(char *) toStringz(message)));
 	}
 	
 	/** 
