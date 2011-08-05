@@ -131,10 +131,12 @@ class PublicKey{
 		ks.E = cast(char *) tmp[1].dup;
 		
 		this.rsa = pubkey_to_rsa(ks);
-		
-		// key check
-		if (rsa_check_pubkey(&this.rsa) != 0)
-			throw new InvalidKey("Invalid public key!");
+
+		version(Posix){ // doesn't work on windows :S
+			// key check
+			if (rsa_check_pubkey(&this.rsa) != 0)
+				throw new InvalidKey("Invalid public key!");
+		}
 	}
 	
 	/**
@@ -203,11 +205,9 @@ class PrivateKey : PublicKey{
 		
 		super(this.getPublicKey().toString());
 		
-		version(Posix){ // doesn't work on windows :S
-			// key check
-			if (rsa_check_privkey(&this.rsa) != 0)
-				throw new InvalidKey("Invalid private key!");
-		}
+		// key check
+		if (rsa_check_privkey(&this.rsa) != 0)
+			throw new InvalidKey("Invalid private key!");
 	}
 	
 	/**
