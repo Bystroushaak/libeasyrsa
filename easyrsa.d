@@ -223,6 +223,9 @@ class PrivateKey : PublicKey{
 	 * Returns: 256B long string containing sign converted into hexa.
 	*/
 	public string sign(string message){
+		if (message == "")
+			throw new RSAException("Signed message can't be blank!");
+			
 		return std.conv.to!string(rsa_sign(&this.rsa, cast(char *) message.dup));
 	}
 	
