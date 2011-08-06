@@ -5,7 +5,7 @@ OUTPUT=libeasyrsa.a
 build: $(OUTPUT)
 
 $(OUTPUT): easyrsa.o
-	(cd polarssl; make)
+	(cd polarssl/library; make)
 	@echo
 	@echo Creating library $(OUTPUT):
 	-mkdir out
@@ -19,12 +19,16 @@ $(OUTPUT): easyrsa.o
 easyrsa.o: easyrsa.c easyrsa.h
 	$(CC) $(CFLAGS) easyrsa.c -oeasyrsa.o
 
+download:
+	svn co http://polarssl.org/repos/polarssl/polarssl/trunk polarssl
+
 clean:
 	-rm *.a *.o
 	-rm -fr out
-	
-download:
-	svn co http://polarssl.org/repos/polarssl/polarssl/trunk polarssl
+
+superclean: clean
+	-rm -fr out
+	-rm -fr polarssl
 
 help:
 	@echo download
